@@ -1,7 +1,10 @@
 package com.example.listview;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -35,6 +38,27 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.layout_lista_personalizada,
                 listaFrutas
         );
+
+        SQLiteDatabase bd;
+
+        bd = openOrCreateDatabase("banco", MODE_PRIVATE, null);
+
+        bd.execSQL("CREATE TABLE IF NOT EXISTS alunos ( id INTEGER PRIMARY KEY AUTOINCREMENT, nome VARCHAR )");
+
+        bd.execSQL("INSERT INTO alunos (nome) VALUES ('Romulo Beninca' )");
+        bd.execSQL("INSERT INTO alunos (nome) VALUES ('Mateus Nunes' )");
+        bd.execSQL("INSERT INTO alunos (nome) VALUES ('Andreu Carminatti' )");
+
+        Cursor cursor = bd.rawQuery("SELECT id, nome  FROM  alunos ", null);
+        cursor.moveToFirst();
+
+        do
+        {
+            String s = cursor.getString( 1);
+            Log.i(" Resultado Sql :",s );
+        }
+        while
+        (cursor.moveToNext()) ;
 
         listView.setAdapter(adapter);
     }
